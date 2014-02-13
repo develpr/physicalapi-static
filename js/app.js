@@ -31,10 +31,10 @@ phapiApp.factory("User", function(){
 
 phapiApp.config(function(RestangularProvider, $locationProvider, $routeProvider) {
 
-    RestangularProvider.setBaseUrl('http://www.phapi.com/api/v1');
+    //RestangularProvider.setBaseUrl('http://www.phapi.com/api/v1');
 
     $routeProvider.when('/', {
-        templateUrl: 'js/templates/login.html',
+        templateUrl: '/js/templates/login.html',
         controller: "LoginController",
         resolve: {
         }
@@ -51,6 +51,6 @@ phapiApp.config(function(RestangularProvider, $locationProvider, $routeProvider)
 phapiApp.controller('LoginController', function($scope, User, Restangular) {
 
     $scope.user = User;
-
+	
 });
 

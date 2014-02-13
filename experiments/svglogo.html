@@ -1,0 +1,312 @@
+<!doctype html>
+<html class="no-js" lang="en" ng-app="phapiApp">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physical API</title>
+    <link rel="stylesheet" href="/css/app.css" />
+	<style>
+	#main-logo{
+		width:120px;
+		height:120px;
+	}
+	</style>
+	
+</head>
+<body ng-controller="LoginController">
+	<div class="row">
+		<div id="main-logo"></div>
+	</div>
+<script src="/bower_components/foundation/js/vendor/modernizr.js "></script>
+<script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular-route/angular-route.min.js"></script>
+<script src="/bower_components/jquery/jquery.js"></script>
+<script src="/bower_components/lodash/dist/lodash.underscore.min.js"></script>
+<script src="/bower_components/restangular/dist/restangular.min.js"></script>
+<script src="/bower_components/angular-foundation/mm-foundation-tpls.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/svg.js/dist/svg.min.js"></script>
+<script src="/js/app.js"></script>
+<script>
+
+var drawCircles = function(draw, options){
+
+    var settings = { 
+        circles:20, 
+        x:0, 
+        y:0, 
+        diam:20, 
+        area:20, 
+        color1:"005eee", 
+        color2:"00e343",
+		width:1,
+		opacity: 1
+    };
+    
+    jQuery.extend(settings, options);    
+    
+    var items = [];
+    var rainbow = new Rainbow();
+    rainbow.setSpectrum(settings.color1, settings.color2);
+    rainbow.setNumberRange(0, settings.circles);
+    
+    for(i = 0; i < settings.circles; i++){
+        
+        var currentCenterPointX = (Math.cos(360 * (i/settings.circles)) * settings.area) + settings.x;
+        var currentCenterPointY = (Math.sin(360 * (i/settings.circles)) * settings.area) + settings.y;
+        
+        var color = "#" + rainbow.colourAt(i);
+        var circle = draw.circle(settings.diam)
+          .fill('none')
+          .x(currentCenterPointX)
+          .y(currentCenterPointY)
+          .stroke({ width: settings.width, opacity: settings.opacity, color:color });
+        
+        items.push(circle);
+        
+    }
+    return items;
+};
+
+$(function(){
+	
+
+	var draw = SVG('main-logo');
+	var offset = 55;
+	var settings = { 
+	    circles:44, 
+	    x:offset, 
+	    y:offset-20, 
+	    diam:13, 
+	    area:32, 
+	    color1:"EA0037", 
+	    color2:"35D4A0",
+		width:1,
+		opacity: 0.7
+	    };
+
+	var items1;
+
+
+
+	items1 = drawCircles(draw, settings);
+
+	/*
+	$.each(items1, function(index, item){
+	   if(index > (settings.circles/2))
+	      return;
+	   item.animate(1000, '>', index*100)
+	        .stroke({ width: 2, color:"#ee3045" });
+	});
+	*/
+
+	settings.x = offset + settings.area * 0.6;
+	settings.y = offset-20 + settings.area * 1.1;
+	settings.color1 = "156E62";
+	settings.color2 = "5073C4";
+	var items2 = drawCircles(draw, settings);
+
+	settings.color1 = "6FAF4C";
+	settings.color2 = "2D471F";	
+	settings.x = offset - settings.area * 0.6;
+	settings.y = offset-20 + settings.area * 1.1;
+	var items3 = drawCircles(draw, settings);
+	
+	
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+RainbowVis-JS 
+Released under MIT License
+*/
+
+function Rainbow()
+{
+	var gradients = null;
+	var minNum = 0;
+	var maxNum = 100;
+	var colours = ['ff0000', 'ffff00', '00ff00', '0000ff']; 
+	setColours(colours);
+	
+	function setColours (spectrum) 
+	{
+		if (spectrum.length < 2) {
+			throw new Error('Rainbow must have two or more colours.');
+		} else {
+			var increment = (maxNum - minNum)/(spectrum.length - 1);
+			var firstGradient = new ColourGradient();
+			firstGradient.setGradient(spectrum[0], spectrum[1]);
+			firstGradient.setNumberRange(minNum, minNum + increment);
+			gradients = [ firstGradient ];
+			
+			for (var i = 1; i < spectrum.length - 1; i++) {
+				var colourGradient = new ColourGradient();
+				colourGradient.setGradient(spectrum[i], spectrum[i + 1]);
+				colourGradient.setNumberRange(minNum + increment * i, minNum + increment * (i + 1)); 
+				gradients[i] = colourGradient; 
+			}
+
+			colours = spectrum;
+			return this;
+		}
+	}
+
+	this.setColors = this.setColours;
+
+	this.setSpectrum = function () 
+	{
+		setColours(arguments);
+		return this;
+	}
+
+	this.setSpectrumByArray = function (array)
+	{
+		setColours(array);
+        return this;
+	}
+
+	this.colourAt = function (number)
+	{
+		if (isNaN(number)) {
+			throw new TypeError(number + ' is not a number');
+		} else if (gradients.length === 1) {
+			return gradients[0].colourAt(number);
+		} else {
+			var segment = (maxNum - minNum)/(gradients.length);
+			var index = Math.min(Math.floor((Math.max(number, minNum) - minNum)/segment), gradients.length - 1);
+			return gradients[index].colourAt(number);
+		}
+	}
+
+	this.colorAt = this.colourAt;
+
+	this.setNumberRange = function (minNumber, maxNumber)
+	{
+		if (maxNumber > minNumber) {
+			minNum = minNumber;
+			maxNum = maxNumber;
+			setColours(colours);
+		} else {
+			throw new RangeError('maxNumber (' + maxNumber + ') is not greater than minNumber (' + minNumber + ')');
+		}
+		return this;
+	}
+}
+
+function ColourGradient() 
+{
+	var startColour = 'ff0000';
+	var endColour = '0000ff';
+	var minNum = 0;
+	var maxNum = 100;
+
+	this.setGradient = function (colourStart, colourEnd)
+	{
+		startColour = getHexColour(colourStart);
+		endColour = getHexColour(colourEnd);
+	}
+
+	this.setNumberRange = function (minNumber, maxNumber)
+	{
+		if (maxNumber > minNumber) {
+			minNum = minNumber;
+			maxNum = maxNumber;
+		} else {
+			throw new RangeError('maxNumber (' + maxNumber + ') is not greater than minNumber (' + minNumber + ')');
+		}
+	}
+
+	this.colourAt = function (number)
+	{
+		return calcHex(number, startColour.substring(0,2), endColour.substring(0,2)) 
+			+ calcHex(number, startColour.substring(2,4), endColour.substring(2,4)) 
+			+ calcHex(number, startColour.substring(4,6), endColour.substring(4,6));
+	}
+	
+	function calcHex(number, channelStart_Base16, channelEnd_Base16)
+	{
+		var num = number;
+		if (num < minNum) {
+			num = minNum;
+		}
+		if (num > maxNum) {
+			num = maxNum;
+		} 
+		var numRange = maxNum - minNum;
+		var cStart_Base10 = parseInt(channelStart_Base16, 16);
+		var cEnd_Base10 = parseInt(channelEnd_Base16, 16); 
+		var cPerUnit = (cEnd_Base10 - cStart_Base10)/numRange;
+		var c_Base10 = Math.round(cPerUnit * (num - minNum) + cStart_Base10);
+		return formatHex(c_Base10.toString(16));
+	}
+
+	formatHex = function (hex) 
+	{
+		if (hex.length === 1) {
+			return '0' + hex;
+		} else {
+			return hex;
+		}
+	} 
+	
+	function isHexColour(string)
+	{
+		var regex = /^#?[0-9a-fA-F]{6}$/i;
+		return regex.test(string);
+	}
+
+	function getHexColour(string)
+	{
+		if (isHexColour(string)) {
+			return string.substring(string.length - 6, string.length);
+		} else {
+			var colourNames =
+			[
+				['red', 'ff0000'],
+				['lime', '00ff00'],
+				['blue', '0000ff'],
+				['yellow', 'ffff00'],
+				['orange', 'ff8000'],
+				['aqua', '00ffff'],
+				['fuchsia', 'ff00ff'],
+				['white', 'ffffff'],
+				['black', '000000'],
+				['gray', '808080'],
+				['grey', '808080'],
+				['silver', 'c0c0c0'],
+				['maroon', '800000'],
+				['olive', '808000'],
+				['green', '008000'],
+				['teal', '008080'],
+				['navy', '000080'],
+				['purple', '800080']
+			];
+			for (var i = 0; i < colourNames.length; i++) {
+				if (string.toLowerCase() === colourNames[i][0]) {
+					return colourNames[i][1];
+				}
+			}
+			throw new Error(string + ' is not a valid colour.');
+		}
+	}
+}
+
+</script>
+</body>
+</html>
