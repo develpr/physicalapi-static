@@ -17,16 +17,9 @@
 	<div class="row">
 		<div id="main-logo"></div>
 	</div>
-<script src="/bower_components/foundation/js/vendor/modernizr.js "></script>
-<script src="/bower_components/angular/angular.js"></script>
-<script src="/bower_components/angular-route/angular-route.min.js"></script>
-<script src="/bower_components/jquery/jquery.js"></script>
-<script src="/bower_components/lodash/dist/lodash.underscore.min.js"></script>
-<script src="/bower_components/restangular/dist/restangular.min.js"></script>
-<script src="/bower_components/angular-foundation/mm-foundation-tpls.min.js"></script>
-<script src="/bower_components/foundation/js/foundation.min.js"></script>
-<script src="/bower_components/svg.js/dist/svg.min.js"></script>
-<script src="/js/app.js"></script>
+
+	<script src="/js/build/app.min.js"></script>
+	
 <script>
 
 var drawCircles = function(draw, options){
@@ -72,6 +65,15 @@ $(function(){
 	
 
 	var draw = SVG('main-logo');
+	// var text = draw.text("a").move(58, 13).font({
+	//           family: 'Helvetica'
+	//         , size: 23
+	//         , anchor: 'middle'
+	//         , leading: '1em'
+	//         });
+	
+
+		
 	var offset = 55;
 	var settings = { 
 	    circles:44, 
@@ -81,38 +83,52 @@ $(function(){
 	    area:32, 
 	    color1:"EA0037", 
 	    color2:"35D4A0",
-		width:1,
+		width:1.5,
 		opacity: 0.7
 	    };
 
 	var items1;
-
-
-
+	var group = draw.group();
+	
 	items1 = drawCircles(draw, settings);
-
-	/*
+	
 	$.each(items1, function(index, item){
-	   if(index > (settings.circles/2))
-	      return;
-	   item.animate(1000, '>', index*100)
-	        .stroke({ width: 2, color:"#ee3045" });
+	   group.add(item);
 	});
-	*/
+	
 
 	settings.x = offset + settings.area * 0.6;
 	settings.y = offset-20 + settings.area * 1.1;
 	settings.color1 = "156E62";
 	settings.color2 = "5073C4";
-	var items2 = drawCircles(draw, settings);
+	items1 = drawCircles(draw, settings);
+	
+	$.each(items1, function(index, item){
+	   group.add(item);
+	});
+	
 
 	settings.color1 = "6FAF4C";
 	settings.color2 = "2D471F";	
 	settings.x = offset - settings.area * 0.6;
 	settings.y = offset-20 + settings.area * 1.1;
-	var items3 = drawCircles(draw, settings);
+	items1 = drawCircles(draw, settings);
+	
+	$.each(items1, function(index, item){
+	   group.add(item);
+	});
 	
 	
+	var path = draw.path('M 59 45 s -38 30 0 65 l 12 -10 s -21 -12 -14 -21 m 0 0 s 10 5 22 -3 S 56 33 59 45 z').stroke({width:0, color:"#3258ff"}).fill('none');
+	path.forward().forward().forward().forward().forward().forward().forward().forward();
+	
+	$('#main-logo').hover(function(){
+		group.clipWith(path);
+	}, function(){
+		group.unclip();
+	});
+
+	// path.clipWith(group);
 });
 
 
