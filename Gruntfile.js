@@ -37,6 +37,7 @@ module.exports = function(grunt) {
 				'bower_components/angular-foundation/mm-foundation-tpls.min.js',													
 				'bower_components/foundation/js/foundation.min.js',	
 				'bower_components/svg.js/dist/svg.min.js',	
+				'js/rainbox.js',								
 				'js/app.js'																		
 				
 	        ],
