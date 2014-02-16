@@ -51,7 +51,6 @@ phapiSVG.drawCircles = function(draw, options){
         currentCenterPointY = (Math.sin(360 * (i/settings.circles) * Math.PI/180) * settings.largeCircleDiameter/2) + settings.y;
 		opacity = settings.opacity(360 * (i/settings.circles));
 		
-		
         color = "#" + rainbow.colourAt(i);
         circle = draw.circle(settings.smallCircleDiameter)
           .fill('none')
@@ -86,12 +85,29 @@ phapiSVG.drawLogo = function(draw){
 		width:1
 	    };
 	
+	
+		/**
+	
+		*
+		*  CIRCLE ONE
+		'
+
+		*/
 	settings.opacity = function(degrees){
 		return(degrees > 65 && degrees < 110) ? .9 : .2;
 	};
 	$.each(phapiSVG.drawCircles(draw, settings), function(index, item){
 	   circleGroups[1].add(item);
 	});
+	
+	
+	/**
+	
+	*
+	*  CIRCLE TWO
+	'
+
+	*/
 	
 	
 	settings.x = drawArea/2 - largeCircle / 3;
@@ -103,6 +119,15 @@ phapiSVG.drawLogo = function(draw){
 	$.each(phapiSVG.drawCircles(draw, settings), function(index, item){
 	   circleGroups[2].add(item);
 	});
+	
+	
+	/**
+	
+	*
+	*  CIRCLE THREE
+	'
+
+	*/
 	
 	settings.opacity = function(degrees){
 		return(degrees > 125 && degrees < 237) ? .9 : .2;
@@ -117,6 +142,40 @@ phapiSVG.drawLogo = function(draw){
 	   circleGroups[3].add(item);
 	});
 	
+	/**
+	
+	*
+	*  LINES
+	'
+
+	*/
+
+    aCircle = draw.circle(settings.smallCircleDiameter)
+      .fill('none')
+	  .center(drawArea/2, drawArea/5)
+      .stroke({ width: 1, opacity: .8, color: "#" + settings.colors[1]});
+	  
+	var aLine = draw.line(drawArea/2 + smallCircle/2, drawArea/5, drawArea/2 + smallCircle/2, drawArea/5 + smallCircle/2).stroke({ width: 1 });
+		  
+	  
+    pCircle = draw.circle(settings.smallCircleDiameter * .9)
+        .fill('none')
+  	  	.center(drawArea/2 - largeCircle / 2 + smallCircle/2, largeCircle*1.2 + smallCircle/5)
+        .stroke({ width: 1, opacity: .8, color: "#" + settings.colors[2]});
+	
+	var pLine = draw.line(drawArea/2 - largeCircle / 2 + smallCircle/2 - smallCircle/2, largeCircle*1.2 + smallCircle/5, drawArea/2 - largeCircle / 2 + smallCircle/2- smallCircle/2, largeCircle*1.2 + smallCircle/5 + smallCircle/1.2).stroke({ width: 1 });	
+
+
+	var iLine = draw.line(drawArea/2 + largeCircle / 2 - smallCircle/4, largeCircle*1.2 - smallCircle/4, drawArea/2 + largeCircle / 2- smallCircle/4, largeCircle*1.2 + smallCircle - smallCircle/4).stroke({ width: 1 });
+		// 
+	// aCircle = draw.circle(settings.smallCircleDiameter)
+	//         .fill('none')
+	//   	  	.center(drawArea/2 + largeCircle / 2, largeCircle*1.2)
+	//         .stroke({ width: 1, opacity: .8, color: "#" + settings.colors[3] });
+	// 
+	// 
+		// 
+	// var path = draw.plot('M100,200L300,400').stroke({width:1});
 
 	return circleGroups;
 	// settings.x = offset + settings.area * 0.6;
