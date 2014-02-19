@@ -41,14 +41,13 @@ module.exports = function(grunt) {
 				'js/rainbox.js',								
 				'js/app.js',
 				'js/app/phapi.js',
+				'js/build/templates.js',
 				'js/app/services/*',
 				'js/app/config/*',
 				'js/app/modules/*',
 				'js/app/filters/*',
-				'js/app/modules/*',
 				'js/app/directives/*',
-				'js/app/controllers/*',
-				'js/build/templates.js'
+				'js/app/controllers/*'
 			  ],
 	        dest: 'js/build/app.js'
 	    }
@@ -66,7 +65,11 @@ module.exports = function(grunt) {
 	    src:        'js/templates/**.html',
 	    dest:       'js/build/templates.js',
 	    options:{
-	      htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true }
+			 bootstrap:  function(module, script) {
+				 return "phapiApp.run(['$templateCache', function($templateCache) {" + script + "}]);";
+			 },
+	      htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
+			url:    function(url) { return url.replace('js/templates/', ''); }
 	    }
 	  }
 	}

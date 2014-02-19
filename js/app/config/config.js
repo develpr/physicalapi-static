@@ -3,7 +3,7 @@ phapiApp.config(['RestangularProvider', '$locationProvider', '$routeProvider', f
 	//RestangularProvider.setBaseUrl('http://www.phapi.com/api/v1');
 
 	$routeProvider.when('/', {
-		templateUrl: '/js/templates/login.html',
+		templateUrl: 'login.html',
 		controller: "LoginController",
 		resolve: {
 		}
