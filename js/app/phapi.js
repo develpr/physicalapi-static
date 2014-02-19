@@ -1,0 +1,1 @@
+var phapiApp = angular.module('phapiApp', ['mm.foundation', 'utilityModule', 'restangular', 'ngRoute']);

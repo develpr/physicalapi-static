@@ -39,10 +39,18 @@ module.exports = function(grunt) {
 				'bower_components/svg.js/dist/svg.min.js',	
 				'js/svg.export.min.js',	
 				'js/rainbox.js',								
-				'js/app.js'																		
-				
-	        ],
-	        dest: 'js/build/app.js',
+				'js/app.js',
+				'js/app/phapi.js',
+				'js/app/services/*',
+				'js/app/config/*',
+				'js/app/modules/*',
+				'js/app/filters/*',
+				'js/app/modules/*',
+				'js/app/directives/*',
+				'js/app/controllers/*',
+				'js/build/templates.js'
+			  ],
+	        dest: 'js/build/app.js'
 	    }
 	},
 	
@@ -51,6 +59,16 @@ module.exports = function(grunt) {
 	        src: 'js/build/app.js',
 	        dest: 'js/build/app.min.js'
 	    }
+	},
+	
+	ngtemplates:    {
+	  app:{
+	    src:        'js/templates/**.html',
+	    dest:       'js/build/templates.js',
+	    options:{
+	      htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true }
+	    }
+	  }
 	}
 	
   });
@@ -61,7 +79,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-angular-templates');  
 
   grunt.registerTask('build', ['sass']);
-  grunt.registerTask('default', ['build','concat','uglify','watch'])
+  grunt.registerTask('default', ['ngtemplates','build','concat','uglify','watch'])
 }
